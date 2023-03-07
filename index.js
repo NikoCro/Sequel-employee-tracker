@@ -77,7 +77,25 @@ function showRoles() {
 }
 
 function addDepartment() {
-  const questions = inquirer.prompt(questions).then((answer) => {});
+  const questions = {
+    type: "input",
+    name: "department",
+    message: "What department do you want to add ?",
+  };
+  inquirer.prompt(questions).then((answer) => {
+    db.query(
+      `INSERT INTO departments (department_name)
+  VALUES (?)`,
+      answer.department,
+      (err, data) => {
+        console.log("Successfully added a deparment!");
+        if (err) {
+          console.error(err);
+        }
+        promptMenu();
+      }
+    );
+  });
 }
 
 function addEmployee() {
@@ -85,7 +103,38 @@ function addEmployee() {
 }
 
 function addRole() {
-  const questions = inquirer.prompt(questions).then((answer) => {});
+  const questions = [
+    {
+      type: "input",
+      name: "title",
+      message: "What role do you want to add ?",
+    },
+    {
+      type: "input",
+      name: "salary",
+      message: "What is the annual salary for this position ?",
+    },
+    {
+      type: "input",
+      name: "department",
+      message: "What department does the role belong to?",
+    },
+  ];
+
+  inquirer.prompt(questions).then((answer) => {
+    db.query(
+      `INSERT INTO roles
+VALUES (?)`,
+      [answer.title, answer.salary, answer.department],
+      (err, data) => {
+        console.log("Successfully added a role!");
+        if (err) {
+          console.error(err);
+        }
+        promptMenu();
+      }
+    );
+  });
 }
 
 promptMenu();
