@@ -8,7 +8,7 @@ const menuQuestion = {
   name: "todo",
   choices: [
     "add Employee",
-    "add Department ",
+    "add Department",
     "add Role",
     "view Employees",
     "view Departments",
@@ -42,6 +42,16 @@ function promptMenu() {
     if (answer.todo === "view Roles") {
       showRoles();
     }
+
+    if (answer.todo === "add Department") {
+      addDepartment();
+    }
+    if (answer.todo === "add Employee") {
+      addEmployee();
+    }
+    if (answer.todo === "add Role") {
+      addRole();
+    }
   });
 }
 
@@ -65,4 +75,17 @@ function showRoles() {
     promptMenu();
   });
 }
+
+function addDepartment() {
+  const questions = inquirer.prompt(questions).then((answer) => {});
+}
+
+function addEmployee() {
+  const questions = inquirer.prompt(questions).then((answer) => {});
+}
+
+function addRole() {
+  const questions = inquirer.prompt(questions).then((answer) => {});
+}
+
 promptMenu();
