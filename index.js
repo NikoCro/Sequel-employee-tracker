@@ -3,6 +3,20 @@ const mysql = require("mysql2");
 
 //SELECT * FROM departmenet
 
+const menuQuestion = {
+  type: "list",
+  name: "todo",
+  choices: [
+    "add Employee",
+    "add Department ",
+    "add Role",
+    "view Employees",
+    "view Departments",
+    "view Roles",
+  ],
+  message: "What would you like to do next ?",
+};
+
 const db = mysql.createConnection(
   {
     host: "localhost",
@@ -18,21 +32,37 @@ const db = mysql.createConnection(
 // db.query("SELECT * FROM department;", (err, data) => console.table(data));
 
 function promptMenu() {
-  inquirer.prompt({
-    type: "list",
-    name: "todo",
-    choices: [
-      "add Employee",
-      "add Department ",
-      "add Role",
-      "view Employee",
-      "view Department",
-      "view Role",
-    ],
-    message: "What would you like to do next ?",
+  inquirer.prompt(menuQuestion).then((answer) => {
+    if (answer.todo === "view Departments") {
+      showDepartments();
+    }
+    if (answer.todo === "view Employees") {
+      showEmployees();
+    }
+    if (answer.todo === "view Roles") {
+      showRoles();
+    }
   });
 }
 
-function showDepatments() {}
+function showDepartments() {
+  db.query("SELECT * FROM departments;", (err, data) => {
+    console.table(data);
+    promptMenu();
+  });
+}
 
+function showEmployees() {
+  db.query("SELECT * FROM employees;", (err, data) => {
+    console.table(data);
+    promptMenu();
+  });
+}
+
+function showRoles() {
+  db.query("SELECT * FROM roles;", (err, data) => {
+    console.table(data);
+    promptMenu();
+  });
+}
 promptMenu();
