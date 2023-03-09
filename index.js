@@ -13,6 +13,7 @@ const menuQuestion = {
     "view Employees",
     "view Departments",
     "view Roles",
+    "update Employee",
   ],
   message: "What would you like to do next ?",
 };
@@ -51,6 +52,9 @@ function promptMenu() {
     }
     if (answer.todo === "add Role") {
       addRole();
+    }
+    if (answer.todo === "update Employee") {
+      updateEmployee();
     }
   });
 }
@@ -157,12 +161,39 @@ function addEmployee() {
     },
   ];
   inquirer.prompt(questions).then((answer) => {
-    console.log(answer);
     db.query(
       `INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`,
       [answer["first name"], answer["last name"], answer.role, answer.manager],
       (err, data) => {
         console.log("Successfully added a new employee!");
+        if (err) {
+          console.error(err);
+        }
+        promptMenu();
+      }
+    );
+  });
+}
+
+function updateEmployee() {
+  const questions = [
+    {
+      type: "input",
+      name: "whichemployee",
+      message: "Which employee would you like to select?",
+    },
+    {
+      type: "input",
+      name: "newrole",
+      message: "What new role would you like to assign to this employee  ?",
+    },
+  ];
+  inquirer.prompt(questions).then((answer) => {
+    db.query(
+      `UPDATE employees SET role_id = ? WHERE id = ?`,
+      [answer.newrole, answer.whichemployee],
+      (err, data) => {
+        console.log("Successfully updated Employee!");
         if (err) {
           console.error(err);
         }
