@@ -84,11 +84,10 @@ function addDepartment() {
   };
   inquirer.prompt(questions).then((answer) => {
     db.query(
-      `INSERT INTO departments (department_name)
-  VALUES (?)`,
+      `INSERT INTO departments(department_name) VALUES (?)`,
       answer.department,
       (err, data) => {
-        console.log("Successfully added a deparment!");
+        console.log("Successfully added a department!");
         if (err) {
           console.error(err);
         }
@@ -96,10 +95,6 @@ function addDepartment() {
       }
     );
   });
-}
-
-function addEmployee() {
-  const questions = inquirer.prompt(questions).then((answer) => {});
 }
 
 function addRole() {
@@ -123,8 +118,7 @@ function addRole() {
 
   inquirer.prompt(questions).then((answer) => {
     db.query(
-      `INSERT INTO roles
-VALUES (?)`,
+      `INSERT INTO roles (title, salary, department_id) VALUES(?, ?, ?)`,
       [answer.title, answer.salary, answer.department],
       (err, data) => {
         console.log("Successfully added a role!");
@@ -138,3 +132,42 @@ VALUES (?)`,
 }
 
 promptMenu();
+
+function addEmployee() {
+  const questions = [
+    {
+      type: "input",
+      name: "first name",
+      message: "What's the first name of new employee ?",
+    },
+    {
+      type: "input",
+      name: "last name",
+      message: "What is the last name of new employee ?",
+    },
+    {
+      type: "input",
+      name: "role",
+      message: "What role is new employee assigned to?",
+    },
+    {
+      type: "input",
+      name: "manager",
+      message: "What manager is new employee assigned to?",
+    },
+  ];
+  inquirer.prompt(questions).then((answer) => {
+    console.log(answer);
+    db.query(
+      `INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`,
+      [answer["first name"], answer["last name"], answer.role, answer.manager],
+      (err, data) => {
+        console.log("Successfully added a new employee!");
+        if (err) {
+          console.error(err);
+        }
+        promptMenu();
+      }
+    );
+  });
+}
