@@ -1,8 +1,6 @@
 const inquirer = require("inquirer");
 const mysql = require("mysql2");
 
-//SELECT * FROM departmenet
-
 const menuQuestion = {
   type: "list",
   name: "todo",
@@ -43,7 +41,6 @@ function promptMenu() {
     if (answer.todo === "view Roles") {
       showRoles();
     }
-
     if (answer.todo === "add Department") {
       addDepartment();
     }
@@ -51,6 +48,7 @@ function promptMenu() {
       addEmployee();
     }
     if (answer.todo === "add Role") {
+      //   addRole();
       addRole();
     }
     if (answer.todo === "update Employee") {
@@ -73,6 +71,16 @@ function showEmployees() {
   });
 }
 
+function showAll() {
+  db.query(
+    "SELECT employees.*, roles.title, roles.salary, departments.department_name FROM employees LEFT JOIN roles ON employees.role_id = roles.id LEFT JOIN departments ON roles.department_id = departments.id;",
+    (err, data) => {
+      if (err) console.log(err);
+      console.table(data);
+      promptMenu();
+    }
+  );
+}
 function showRoles() {
   db.query("SELECT * FROM roles;", (err, data) => {
     console.table(data);
@@ -162,8 +170,14 @@ function addEmployee() {
   ];
   inquirer.prompt(questions).then((answer) => {
     db.query(
-      `INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`,
-      [answer["first name"], answer["last name"], answer.role, answer.manager],
+      `INSERT INTO employees (first_name, last_name, role_id, manager_id, department_id) VALUES (?, ?, ?, ?, ?)`,
+      [
+        answer["first name"],
+        answer["last name"],
+        answer.role,
+        answer.manager,
+        answer.department,
+      ],
       (err, data) => {
         console.log("Successfully added a new employee!");
         if (err) {
