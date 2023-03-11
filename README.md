@@ -12,3 +12,6 @@ When i add an employee, that employee is added to the databe with its first and 
 When  I choose to view all departments it shows a table with department names and department ids
 WhenI choose to view all roles it shows a table with job title, role id, the department that role belongs to, and the salary for that role
 When I choose to view all employees, it shows a table with employee data, including employee ids, first names, last names, job titles, departments, salaries, and managers that the employees report to
+
+
+link to recording : https://drive.google.com/file/d/1eZtKeVa4uFcl8nzYOU7Emjj05HuyhDQA/view
